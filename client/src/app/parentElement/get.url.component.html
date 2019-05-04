@@ -1,0 +1,19 @@
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <a class="navbar-brand" (click)="goBack()" style="color: blue; cursor: pointer">Home</a>
+    <p style="font-size: 10px; font: rgb(231, 156, 85)">Mayank Arya (mayank.uiet7@gmail.com) (+91 8968-408-895)</p>
+</nav>
+
+<div class="container" *ngIf="!isSaveClicked">
+    <h3>URL</h3>
+    <div class="form-group">
+        <!-- <label> url </label> -->
+        <input [(ngModel)]="baseUrl" type="text" class="form-control" placeholder="enter link of GitHub repository ">
+    </div>
+    <br>
+    <div class="form-group">
+        <button class="btn btn-success" (click)="onSave()">Save</button>
+    </div>
+</div>
+<div class="container">
+    <app-movie-list-mak *ngIf="isSaveClicked" [baseUrlForm]="baseDataUrl"></app-movie-list-mak>
+</div>

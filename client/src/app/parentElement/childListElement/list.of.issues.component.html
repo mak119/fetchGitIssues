@@ -1,0 +1,58 @@
+<hr>
+<h4 style="display: inline">No. of Open Issues: </h4>
+<h2 style="display: inline-block; color: red">{{count}}</h2>
+<br>
+<hr>
+<ngb-tabset>
+    <ngb-tab>
+        <ng-template ngbTabTitle>Within 24 Hrs ({{dayCount}})</ng-template>
+        <ng-template ngbTabContent>
+            <table class="table table-hover col-lg-10">
+                <thead>
+                    <th>Id</th>
+                    <th>URL</th>
+                    <th>Last Opening Date</th>
+                </thead>
+                <tr *ngFor="let x of issueWithinDayContainingArray; let i  = index">
+                    <td>{{i + 1}}</td>
+                    <td>{{x.htmlUrl}}</td>
+                    <td>{{x.updateDate}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </ngb-tab>
+    <ngb-tab>
+        <ng-template ngbTabTitle>24 Hrs to Week ({{weekCount}})</ng-template>
+        <ng-template ngbTabContent>
+            <table class="table table-hover col-lg-10">
+                <thead>
+                    <th>Id</th>
+                    <th>URL</th>
+                    <th>Last Opening Date</th>
+                </thead>
+                <tr *ngFor="let x of issueWithinWeekContainingArray; let i  = index">
+                    <td>{{i + 1}}</td>
+                    <td>{{x.htmlUrl}}</td>
+                    <td>{{x.updateDate}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </ngb-tab>
+    <ngb-tab>
+        <ng-template ngbTabTitle>More than a week ({{moreCount}})</ng-template>
+        <ng-template ngbTabContent>
+            <table class="table table-hover col-lg-10">
+                <thead>
+                    <th>Id</th>
+                    <th>URL</th>
+                    <th>Last Opening Date</th>
+                </thead>
+                <tr *ngFor="let x of issueMoreThanWeekContainingArray; let i  = index">
+                    <td>{{i + 1}}</td>
+                    <td>{{x.htmlUrl}}</td>
+                    <td>{{x.updateDate}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </ngb-tab>
+</ngb-tabset>

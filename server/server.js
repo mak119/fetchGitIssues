@@ -9,11 +9,11 @@ const app = express();
 app.use(cors());
 // handling the static files which are created when dist directory is created that is on build.
 // __dirname is equivalent to current directory 
-app.use(express.static(path.join(__dirname + '../client/dist/fetchgitissues/')));
+app.use(express.static(path.join(__dirname, '../client/dist/fetchgitissues/')));
 
 // redirecting all the requests to our index.html file
 app.get('*', (request, response) => {
-    response.sendFile(path.join(__dirname + '../client/dist/fetchgitissues/' + 'index.html'));
+    response.sendFile(path.join(__dirname, '../client/dist/fetchgitissues/', 'index.html'));
 });
 
 // starting server on either the port specified by environment or port 3000

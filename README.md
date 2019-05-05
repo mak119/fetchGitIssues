@@ -1,7 +1,5 @@
 # fetchGitIssues
 
-**[Assignment]{.underline}**
-
 Technologies used
 
 1.  NodeJS
@@ -23,59 +21,7 @@ Mayank Arya**
 
 **mayank.uiet7\@gmail.com**
 
-**WebApp**
-
-1.  The landing page:
-
-    a.  ![](media/image1.png){width="5.225in"
-        height="3.265277777777778in"}It is what parentElement component
-        refers to in the code. It contains a form with an input box to
-        enter an URL and a placeholder. Looks like this:
-
-2.  Upon entering a random string, it gives error:
-
-    ![](media/image2.png){width="5.657638888888889in"
-    height="3.536111111111111in"}
-
-3.  ![](media/image3.png){width="5.227777777777778in"
-    height="3.267361111111111in"}Upon entering a valid URL, like this:
-
-4.  List of Issues page opens:\
-    It is what childElement component refers to in the code. It
-    contains:
-
-    b.  a Home button to go back to the form page
-
-    c.  No. Of Open Issues: \<number\>
-
-    d.  3 Tabs: each containing a table having an index, URL link of
-        issue and last opened date.
-
-        i.  ![](media/image4.png){width="5.9743055555555555in"
-            height="3.734027777777778in"}*Tab 1 contains table with
-            issues opened within 24 hrs*.
-
-        ii. ![](media/image5.png){width="5.51875in"
-            height="3.4493055555555556in"}*Tab 2 contains table with
-            issues opened between 24hrs and a week.\
-            \
-            *
-
-        iii. ![](media/image6.png){width="7.027224409448819in"
-            height="4.392404855643044in"}*Tab 3 contains table with
-            issues opened more than a week ago.*
-
-5.  ![](media/image7.png){width="6.263888888888889in"
-    height="3.915277777777778in"}If the entered Git link is invalid or
-    belongs to a private repo, an alert is generated.
-
-6.  ![](media/image8.png){width="6.263888888888889in"
-    height="3.915277777777778in"}If the Git link belongs to a public
-    repo but that repo has no open issues, then such an alert is
-    generated (*to generate this alert I had to hardcode this value thus
-    done on localhost:4200*).\
-    \
-    **[Summary]{.underline}**
+**[Summary]**
 
     *Although the code is thoroughly commented, here is a quick summary
     of what is happening around inside.\

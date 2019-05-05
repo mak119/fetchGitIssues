@@ -8,11 +8,4 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class AppComponent {
   title = 'fetchgitissues';
-
-
-  constructor(private router: Router) { }
-  navigate() {
-    // this.router.navigate(['/update'], { queryParams: { loadParent: 'load' } });
-    this.router.navigateByUrl('/update');
-  }
 }

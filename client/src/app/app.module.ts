@@ -7,9 +7,6 @@ import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-// import { products_m } from './productList/product.list.component';
-// import { product2_m } from './productList2/product2.list.component';
-// import { Product2Service } from './product2.service';
 import { GetUrlComponent } from './parentElement/get.url.component';
 import { FetchGitApiService } from './fetch.git.api.service';
 import { ListOfIssuesComponent } from './parentElement/childListElement/list.of.issues.component';
@@ -17,8 +14,6 @@ import { ListOfIssuesComponent } from './parentElement/childListElement/list.of.
 @NgModule({
   declarations: [
     AppComponent,
-    // products_m,
-    // product2_m,
     GetUrlComponent,
     ListOfIssuesComponent
   ],
@@ -28,12 +23,11 @@ import { ListOfIssuesComponent } from './parentElement/childListElement/list.of.
     FormsModule,
     NgbModule.forRoot(),
     RouterModule.forRoot([
-      { path: 'update', component: GetUrlComponent },
-      { path: 'list', component: ListOfIssuesComponent }
+      { path: '', redirectTo: 'input', pathMatch: 'full' },
+      { path: 'input', component: GetUrlComponent }
     ])
   ],
   providers: [
-    // Product2Service,
     FetchGitApiService
   ],
   bootstrap: [AppComponent]

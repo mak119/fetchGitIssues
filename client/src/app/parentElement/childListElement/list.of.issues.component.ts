@@ -13,15 +13,9 @@ import * as _ from 'underscore';
 export class ListOfIssuesComponent implements OnInit {
     @Input() baseUrlForm: string;
     service: FetchGitApiService;
-    products: any[];
 
-    name = '';
-    club = '';
-    rating = 0;
-    description = '';
-    baseUrl = 'https://api.github.com/repositories?since=364';
-    issuesUrl = [];
-    issuesUrlNeeded: any;
+    baseUrl: any;
+    issuesUrl: any;
     issueWithinDayContainingArray: any[];
     issueWithinWeekContainingArray: any[];
     issueMoreThanWeekContainingArray: any[];
@@ -29,30 +23,17 @@ export class ListOfIssuesComponent implements OnInit {
     dayCount: any;
     weekCount: any;
     moreCount: any;
-    isWithinDay = false;
-    isWithinWeek = true;
-    isMoreThanWeek = false;
-    obnj: any;
     ngOnInit() {
         this.baseUrl = this.baseUrlForm;
         this.reloadProducts();
-        // this.getData();
     }
     constructor(service: FetchGitApiService, private router: Router) {
         this.service = service;
     }
 
-    getData() {
-        this.obnj = this.service.getData(this.baseUrl);
-        // observable.subscribe((data) => {
-        //     debugger;
-        // })
-        debugger;
-    }
     reloadProducts() {
         const observable = this.service.getPlayers(this.baseUrl);
         observable.subscribe((response) => {
-            console.log('google');
             const result_returned = response.json();
             if (result_returned['has_issues'] !== true) {
                 alert('has no issues!');
@@ -60,10 +41,8 @@ export class ListOfIssuesComponent implements OnInit {
             if (result_returned['private'] === true) {
                 alert('this is a private repo');
             }
-            this.issuesUrl = _.pluck(result_returned, 'issues_url');
-            this.issuesUrlNeeded = result_returned['issues_url'];
-            this.baseUrl = this.issuesUrlNeeded.substr(0, this.issuesUrlNeeded.indexOf('{')) + '?state=open';
-            debugger;
+            this.issuesUrl = result_returned['issues_url'];
+            this.baseUrl = this.issuesUrl.substr(0, this.issuesUrl.indexOf('{')) + '?state=open';
             const observable2 = this.service.getPlayers(this.baseUrl);
             observable2.subscribe((data) => {
                 const listOfIssues = data.json();
@@ -86,9 +65,7 @@ export class ListOfIssuesComponent implements OnInit {
                     } else {
                         issueMoreThanWeekContainingArray.push(obj);
                     }
-                    // issueContainingArray.push(obj);
                 });
-                debugger;
                 if (count > 0) {
                     this.count = count;
                     this.issueWithinDayContainingArray = issueWithinDayContainingArray;
@@ -101,44 +78,6 @@ export class ListOfIssuesComponent implements OnInit {
                     alert('error occured');
                 }
             });
-            // if (result_returned.message === 'Success') {
-            //     this.products = result_returned.result;
-            // } else {
-            //     alert('error occured');
-            // }
-            // console.log(result_returned);
-            // this.products = result.data;
         });
-    }
-
-    onDelete(id) {
-        this.service.deletePlayer(id).subscribe((response) => {
-            const result = response.json();
-            if (result.message === 'Success') {
-                this.reloadProducts();
-            } else {
-                alert('error aya');
-            }
-        });
-    }
-
-    onEdit(id) {
-        this.router.navigate(['/update'], { queryParams: { id: id } });
-    }
-
-    onWithinWeekClick() {
-        this.isWithinWeek = !this.isWithinWeek;
-        this.isWithinDay = false;
-        this.isMoreThanWeek = false;
-    }
-    onWithinDayClick() {
-        this.isWithinDay = !this.isWithinDay;
-        this.isWithinWeek = false;
-        this.isMoreThanWeek = false;
-    }
-    onMoreThanWeekClick() {
-        this.isMoreThanWeek = !this.isMoreThanWeek;
-        this.isWithinDay = false;
-        this.isWithinWeek = false;
     }
 }

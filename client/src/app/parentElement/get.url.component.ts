@@ -29,8 +29,8 @@ export class GetUrlComponent {
     }
     onSave() {
         // condition to check if entered url is valid or not.
-        // length > 22 as minimum url can be : https://github.com/*/* which is of length 22
-        if (this.baseUrl.substr(0, 18) === 'https://github.com' && this.baseUrl.length > 22) {
+        // length > 22 as minimum url can be : https://github.com/x/x which is of length 21
+        if (this.baseUrl.substr(0, 18) === 'https://github.com' && this.baseUrl.length > 21) {
             this.errorMessage = '';
             // changing isSaveClicked value to true makes child component appear.
             this.isSaveClicked = true;

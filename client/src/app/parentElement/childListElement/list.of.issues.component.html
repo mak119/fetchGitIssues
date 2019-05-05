@@ -1,11 +1,14 @@
+<!DOCTYPE html>
 <hr>
 <h4 style="display: inline">No. of Open Issues: </h4>
-<h2 style="display: inline-block; color: red">{{count}}</h2>
+<h2 style="display: inline-block; color: red">{{count}}</h2> <!-- data binding or data interpolation -->
 <br>
 <hr>
+<!-- using ngb-tabset i.e. Angular and bootstrap for the UI -->
 <ngb-tabset>
     <ngb-tab>
         <ng-template ngbTabTitle>Within 24 Hrs ({{dayCount}})</ng-template>
+        <!-- Block for issues opened within 24hrs from now -->
         <ng-template ngbTabContent>
             <table class="table table-hover col-lg-10">
                 <thead>
@@ -14,15 +17,17 @@
                     <th>Last Opening Date</th>
                 </thead>
                 <tr *ngFor="let x of issueWithinDayContainingArray; let i  = index">
-                    <td>{{i + 1}}</td>
-                    <td>{{x.htmlUrl}}</td>
-                    <td>{{x.updateDate}}</td>
+                    <!-- for loop on an array that is defined in ts file -->
+                    <td>{{i + 1}}</td> <!-- i is initialized from 0 so adding 1 -->
+                    <td>{{x.htmlUrl}}</td> <!-- getting value in object x with key htmlUrl -->
+                    <td>{{x.updateDate}}</td> <!-- getting vlaue in object x with key updateDate -->
                 </tr>
             </table>
         </ng-template>
     </ngb-tab>
     <ngb-tab>
         <ng-template ngbTabTitle>24 Hrs to Week ({{weekCount}})</ng-template>
+        <!-- Block for issues opened between 24hrs and 7 days from now -->
         <ng-template ngbTabContent>
             <table class="table table-hover col-lg-10">
                 <thead>
@@ -31,15 +36,17 @@
                     <th>Last Opening Date</th>
                 </thead>
                 <tr *ngFor="let x of issueWithinWeekContainingArray; let i  = index">
-                    <td>{{i + 1}}</td>
-                    <td>{{x.htmlUrl}}</td>
-                    <td>{{x.updateDate}}</td>
+                    <!-- iterating over issueWithinWeekContainingArray -->
+                    <td>{{i + 1}}</td> <!-- i is initialized from 0 so adding 1 -->
+                    <td>{{x.htmlUrl}}</td> <!-- getting value in object x with key htmlUrl -->
+                    <td>{{x.updateDate}}</td> <!-- getting value in object x with key updateDate -->
                 </tr>
             </table>
         </ng-template>
     </ngb-tab>
     <ngb-tab>
         <ng-template ngbTabTitle>More than a week ({{moreCount}})</ng-template>
+        <!-- Block for issues opened more than a week ago -->
         <ng-template ngbTabContent>
             <table class="table table-hover col-lg-10">
                 <thead>
@@ -48,9 +55,10 @@
                     <th>Last Opening Date</th>
                 </thead>
                 <tr *ngFor="let x of issueMoreThanWeekContainingArray; let i  = index">
-                    <td>{{i + 1}}</td>
-                    <td>{{x.htmlUrl}}</td>
-                    <td>{{x.updateDate}}</td>
+                    <!-- iterating over issueMoreThanWeekContainingArray -->
+                    <td>{{i + 1}}</td> <!-- i is initialized from 0 so adding 1 -->
+                    <td>{{x.htmlUrl}}</td> <!-- getting value in object x with key htmlUrl -->
+                    <td>{{x.updateDate}}</td> <!-- getting value in object x with key updateDate -->
                 </tr>
             </table>
         </ng-template>

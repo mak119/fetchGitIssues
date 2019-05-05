@@ -1,19 +1,28 @@
+<!DOCTYPE html>
+<!-- navbar code with a home button visible at all times to navigate back and my contact details -->
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <a class="navbar-brand" (click)="goBack()" style="color: blue; cursor: pointer">Home</a>
     <p style="font-size: 10px; font: rgb(231, 156, 85)">Mayank Arya (mayank.uiet7@gmail.com) (+91 8968-408-895)</p>
 </nav>
 
+<!-- the visibility of these two divs depends on the variable isSaveClicked -->
+<!-- if isSaveClicked has a value false display this block that is the url enetering page -->
 <div class="container" *ngIf="!isSaveClicked">
     <h3>URL</h3>
+    <!-- this div contains the main form -->
     <div class="form-group">
-        <!-- <label> url </label> -->
-        <input [(ngModel)]="baseUrl" type="text" class="form-control" placeholder="enter link of GitHub repository ">
+        <input [(ngModel)]="baseUrl" type="text" class="form-control" placeholder="enter link of GitHub repository e.g. https://github.com/:user/:repo ">
     </div>
+    <!-- this block contains the error message whose visibility depends on the logic defining value of variable errorMessage -->
+    <div style="color: red; font-style: italic; font-size: 12px">{{errorMessage}}</div>
+    <!-- data interpolation in play-->
     <br>
+    <!-- this is the save button, which on click calls the onSave() function -->
     <div class="form-group">
         <button class="btn btn-success" (click)="onSave()">Save</button>
     </div>
 </div>
+<!-- If isSaveClicked has a value true display this block that is the list of issues displaying page -->
 <div class="container">
     <app-movie-list-mak *ngIf="isSaveClicked" [baseUrlForm]="baseDataUrl"></app-movie-list-mak>
 </div>

@@ -1,25 +1,18 @@
+// importing libraries and files required by this file
 import { Injectable } from '@angular/core';
-import { Http, RequestOptions, Headers } from '@angular/http';
-import * as _ from 'underscore';
+import { Http } from '@angular/http';
 
+// @Injectable() decorator to indicate that a component or other class has a dependency
+// @Injectable allows Angular to inject it into another class as a dependecy
 @Injectable()
 export class FetchGitApiService {
-    // baseUrl = 'https://api.github.com/repositories?since=364';
-    baseUrl = '';
     http: Http;
-    issuesUrl = [];
-    issuesUrlNeeded: any;
-    issueWithinDayContainingArray: any[];
-    issueWithinWeekContainingArray: any[];
-    issueMoreThanWeekContainingArray: any[];
-    objectForReturn: any;
-    count: 0;
 
     constructor(http: Http) {
         this.http = http;
     }
-
-    public getPlayers(baseUrl) {
+    // function being called by the components which basically returns the result of a api hit by http GET method.
+    public hitApiLoadIssues(baseUrl) {
         return this.http.get(baseUrl);
     }
 }

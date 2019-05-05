@@ -1,0 +1,24 @@
+{
+  "name": "fetchgitissues",
+  "version": "1.0.0",
+  "description": "Fetch Git Issues Api Assignment",
+  "main": "server/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mak119/fetchGitIssues.git"
+  },
+  "author": "Mayank Arya (mayank.uiet7@gmaiil.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mak119/fetchGitIssues/issues"
+  },
+  "homepage": "https://github.com/mak119/fetchGitIssues#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.16.4"
+  }
+}

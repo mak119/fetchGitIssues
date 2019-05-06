@@ -1,11 +1,42 @@
 <!DOCTYPE html>
 <hr>
-<h4 style="display: inline">No. of Open Issues: </h4>
-<h2 style="display: inline-block; color: red">{{count}}</h2> <!-- data binding or data interpolation -->
+<div class="display-inline-flex">
+    <span>
+        <h4 style="display: inline-block">No. of Open Issues: </h4>
+    </span>
+    <span class="margin-left-10-px margin-top-6-px">
+        <div class="spinner" *ngIf="isLoading">
+            <div class="rect1"></div>
+            <div class="rect2"></div>
+            <div class="rect3"></div>
+            <div class="rect4"></div>
+            <div class="rect5"></div>
+        </div>
+    </span>
+    <span *ngIf="count">
+        <h4 class="color-red margin-left-10-px">{{count}}</h4>
+    </span>
+</div>
+<!-- data binding or data interpolation -->
 <br>
 <hr>
+<!-- <div class="spinner" *ngIf="isLoading"></div> -->
+<div class="sk-circle" *ngIf="isLoading">
+    <div class="sk-circle1 sk-child"></div>
+    <div class="sk-circle2 sk-child"></div>
+    <div class="sk-circle3 sk-child"></div>
+    <div class="sk-circle4 sk-child"></div>
+    <div class="sk-circle5 sk-child"></div>
+    <div class="sk-circle6 sk-child"></div>
+    <div class="sk-circle7 sk-child"></div>
+    <div class="sk-circle8 sk-child"></div>
+    <div class="sk-circle9 sk-child"></div>
+    <div class="sk-circle10 sk-child"></div>
+    <div class="sk-circle11 sk-child"></div>
+    <div class="sk-circle12 sk-child"></div>
+</div>
 <!-- using ngb-tabset i.e. Angular and bootstrap for the UI -->
-<ngb-tabset>
+<ngb-tabset *ngIf="!isLoading">
     <ngb-tab>
         <ng-template ngbTabTitle>Within 24 Hrs ({{dayCount}})</ng-template>
         <!-- Block for issues opened within 24hrs from now -->

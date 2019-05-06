@@ -12,7 +12,26 @@ export class FetchGitApiService {
         this.http = http;
     }
     // function being called by the components which basically returns the result of a api hit by http GET method.
-    public hitApiLoadIssues(baseUrl) {
-        return this.http.get(baseUrl);
+    public hitApiLoadIssues(baseUrl, iterations) {
+        const promises = [];
+        let tempBaseUrl;
+        // if iterations is null, just hit the api once and exit.
+        if (iterations == null) {
+            return this.http.get(baseUrl);
+        } else { // else initiate a for loop to run for specified number of iterations
+            for (let i = 1; i <= iterations; i++) {
+                tempBaseUrl = baseUrl;
+                // create a URL with query "?page=<number>&per_page=100"
+                if (i !== iterations) {
+                    tempBaseUrl = `${tempBaseUrl}?page=${i}&per_page=100`;
+                } else { // for the last page, create a URL with query "?page=<number>"
+                    tempBaseUrl = `${tempBaseUrl}?page=${i}`;
+                }
+                // pushing the promises into an array
+                promises.push(this.http.get(tempBaseUrl).toPromise());
+            }
+            return promises;
+        }
+
     }
 }

@@ -5,6 +5,8 @@
         <h4 style="display: inline-block">No. of Open Issues: </h4>
     </span>
     <span class="margin-left-10-px margin-top-6-px">
+        <!-- The main animation that goes in front of No. of issues, it's visibility is controlled by the variable isLoading -->
+        <!-- If isLoading is true only then display this animation-->
         <div class="spinner" *ngIf="isLoading">
             <div class="rect1"></div>
             <div class="rect2"></div>
@@ -13,14 +15,16 @@
             <div class="rect5"></div>
         </div>
     </span>
+    <!-- If count is not generated this div will not be displayed -->
     <span *ngIf="count">
+        <!-- data binding or data interpolation -->
         <h4 class="color-red margin-left-10-px">{{count}}</h4>
     </span>
 </div>
-<!-- data binding or data interpolation -->
 <br>
 <hr>
-<!-- <div class="spinner" *ngIf="isLoading"></div> -->
+<!-- The main animation that goes in circle, it's visibility is controlled by the variable isLoading -->
+<!-- If isLoading is true only then display this animation-->
 <div class="sk-circle" *ngIf="isLoading">
     <div class="sk-circle1 sk-child"></div>
     <div class="sk-circle2 sk-child"></div>

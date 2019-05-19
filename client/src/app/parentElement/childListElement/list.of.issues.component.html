@@ -18,7 +18,10 @@
     <!-- If count is not generated this div will not be displayed -->
     <span *ngIf="count">
         <!-- data binding or data interpolation -->
-        <h4 class="color-red margin-left-10-px">{{count}}</h4>
+        <h4 class="color-red margin-left-10-px">{{count}} / </h4>
+    </span>
+    <span *ngIf="totalCount">
+        / {{totalCount}}
     </span>
 </div>
 <br>
@@ -27,7 +30,7 @@
 <!-- using ngb-tabset i.e. Angular and bootstrap for the UI -->
 <ngb-tabset>
     <ngb-tab>
-        <ng-template ngbTabTitle>Within 24 Hrs ({{dayCount}})</ng-template>
+        <ng-template ngbTabTitle>Within 24 Hrs ({{dayCount}} / {{dayCountTotal}})</ng-template>
         <!-- Block for issues opened within 24hrs from now -->
         <ng-template ngbTabContent *ngIf="!isDayLoading">
             <table class="table table-hover col-lg-10">
@@ -71,7 +74,7 @@
         </ng-template>
     </ngb-tab>
     <ngb-tab>
-        <ng-template ngbTabTitle>24 Hrs to Week ({{weekCount}})</ng-template>
+        <ng-template ngbTabTitle>24 Hrs to Week ({{weekCount}} / {{weekCountTotal}})</ng-template>
         <!-- Block for issues opened between 24hrs and 7 days from now -->
         <ng-template ngbTabContent *ngIf="!isWeekLoading">
             <table class="table table-hover col-lg-10">
@@ -115,7 +118,7 @@
         </ng-template>
     </ngb-tab>
     <ngb-tab>
-        <ng-template ngbTabTitle>More than a week ({{moreCount}})</ng-template>
+        <ng-template ngbTabTitle>More than a week ({{moreCount}} / {{moreCountTotal}})</ng-template>
         <!-- Block for issues opened more than a week ago -->
         <ng-template ngbTabContent *ngIf="!isMoreThanWeekLoading">
             <table class="table table-hover col-lg-10">

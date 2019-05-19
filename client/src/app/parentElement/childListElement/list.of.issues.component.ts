@@ -26,9 +26,13 @@ export class ListOfIssuesComponent implements OnInit {
     issueWithinWeekContainingArray: any[];
     issueMoreThanWeekContainingArray: any[];
     count: 0;
+    totalCount: any;
     dayCount: any;
+    dayCountTotal: any;
     weekCount: any;
+    weekCountTotal: any;
     moreCount: any;
+    moreCountTotal: any;
     isDayLoading = false;
     isWeekLoading = false;
     isMoreThanWeekLoading = false;
@@ -42,6 +46,7 @@ export class ListOfIssuesComponent implements OnInit {
         this.isWeekLoading = true;
         this.isMoreThanWeekLoading = true;
         this.isLoadingHeader = true;
+        this.totalCount = '';
         this.checkForErrors();
     }
     // doing dependency injection i.e. injecting this service into this component so it can have access to the service
@@ -74,7 +79,7 @@ export class ListOfIssuesComponent implements OnInit {
                     return;
                 }
             }, (error) => {
-                alert('invalid URL or the repo is private');
+                alert('invalid URL or the repo is private or limit of 60 API hits has been reached');
                 return;
             });
     }
@@ -124,7 +129,7 @@ export class ListOfIssuesComponent implements OnInit {
         // hitting api to check if user repo combination exists.
         let baseUrl = this.baseUrl;
 
-        let date: any = new Date().getTime() - 604800000 + 19800000;
+        let date: any = (new Date().getTime() - 604800000) + 19800000;
         date = new Date(date);
         baseUrl = baseUrl ? baseUrl + `/issues?state=open&per_page=100&since=${date.toISOString()}&sort=updated-asc` : null;
 
@@ -157,6 +162,7 @@ export class ListOfIssuesComponent implements OnInit {
                 this.moreCount = this.count - (this.dayCount + this.weekCount);
                 // Now since the logic is completed end the animation
                 this.isWeekLoading = false;
+                // this.loadIssuesMoreThanLastWeek();
                 // this.loadIssues();
                 return;
             }, (error) => {
@@ -170,7 +176,8 @@ export class ListOfIssuesComponent implements OnInit {
         // hitting api to check if user repo combination exists.
         let baseUrl = this.baseUrl;
 
-        const page = ((this.dayCount + this.weekCount) / 100) + 1;
+        let page = ((this.dayCount + this.weekCount) / 100);
+        page = Number(page.toFixed());
         baseUrl = baseUrl ? baseUrl + `/issues?state=open&page=${page}per_page=100&&sort=updated-asc` : null;
 
         const observable: any = this.service.hitApiLoadIssues(baseUrl, null);
@@ -295,11 +302,13 @@ export class ListOfIssuesComponent implements OnInit {
             .then((obj) => {
                 if (!obj.error) {
                     this.issueWithinDayContainingArray = obj.issueWithinDayContainingArray;
-                    this.dayCount = obj.dayCount;
+                    this.dayCountTotal = obj.dayCount;
                     this.issueWithinWeekContainingArray = obj.issueWithinWeekContainingArray;
-                    this.weekCount = obj.weekCount;
+                    this.weekCountTotal = obj.weekCount;
                     this.issueMoreThanWeekContainingArray = obj.issueMoreThanWeekContainingArray;
-                    this.moreCount = obj.moreCount;
+                    this.moreCountTotal = obj.moreCount;
+                    this.totalCount = `   (Total Count: ${this.dayCountTotal + this.weekCountTotal + this.moreCountTotal})`;
+
                 } else {
                     alert('error occured');
                 }

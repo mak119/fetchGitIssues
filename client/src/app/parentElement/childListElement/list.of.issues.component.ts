@@ -2,6 +2,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FetchGitApiService } from '../../fetch.git.api.service';
 import * as _ from 'underscore';
+import { reject } from 'q';
 
 // Component decorator
 @Component({
@@ -29,46 +30,187 @@ export class ListOfIssuesComponent implements OnInit {
     dayCount: any;
     weekCount: any;
     moreCount: any;
-    isLoading = false;
+    isDayLoading = false;
+    isWeekLoading = false;
+    isMoreThanWeekLoading = false;
+    isLoadingHeader = false;
 
     // this is a life cycle hook which is triggered on initialization of this component
     ngOnInit() {
         this.baseUrl = this.baseUrlForm;
         // calling the business logic containing function
-        this.isLoading = true;
-        this.loadIssues();
+        this.isDayLoading = true;
+        this.isWeekLoading = true;
+        this.isMoreThanWeekLoading = true;
+        this.isLoadingHeader = true;
+        this.checkForErrors();
     }
     // doing dependency injection i.e. injecting this service into this component so it can have access to the service
     constructor(service: FetchGitApiService) {
         this.service = service;
     }
 
-    // function containing all the business logic
-    loadIssues() {
+    checkForErrors() {
         // using Promises to handle repsonse of api call from service file.
         // hitting api to check if user repo combination exists.
-        const observable: any = this.service.hitApiLoadIssues(this.baseUrl, null);
+        const baseUrl = this.baseUrl;
+        const observable: any = this.service.hitApiLoadIssues(baseUrl, null);
         // promises
         observable.toPromise()
             .then((response) => {
                 // converting the response to a much more readable json format
                 const result_returned = response.json();
-                // checking if the repo is private or not
-                if (result_returned['private'] === true) {
-                    alert('this is a private repo');
-                }
                 // check to ensure that the repo has issues
                 // tslint:disable-next-line:max-line-length
                 this.issuesUrl = (result_returned['has_issues'] === true && result_returned['open_issues_count'] > 0) ? result_returned['issues_url'] : null;
-                // appending a query to only hit api to fetch 1 page and max 100 in that page.
-                this.tempBaseUrl = this.issuesUrl ? this.issuesUrl.substr(0, this.issuesUrl.indexOf('{')) : null;
-                this.baseUrl = this.tempBaseUrl ? this.tempBaseUrl + '?page=1&per_page=100' : null;
-                // now hitting the api for list of issues.
-                const observable2: any = this.service.hitApiLoadIssues(this.baseUrl, null);
-                return observable2.toPromise();
-            }, (reject) => {
+                this.isLoadingHeader = this.issuesUrl ? false : true;
+                this.count = this.issuesUrl ? result_returned['open_issues_count'] : null;
+                if (!this.count) {
+                    alert(' No open issues for this repo');
+                    return reject();
+                } else {
+                    this.loadIssuesWithin24Hours();
+                    this.loadIssuesWithinLastWeek();
+                    this.loadIssuesMoreThanLastWeek();
+                    this.loadAllIssues();
+                    return;
+                }
+            }, (error) => {
                 alert('invalid URL or the repo is private');
-            }).then((data) => {
+                return reject();
+            });
+    }
+    // this function will fetch all the issues opened in last 24 hours
+    loadIssuesWithin24Hours() {
+        // using Promises to handle repsonse of api call from service file.
+        // hitting api to check if user repo combination exists.
+        let baseUrl = this.baseUrl;
+
+        let date: any = new Date().getTime() - 86400000 + 19800000;
+        date = new Date(date);
+        baseUrl = baseUrl ? baseUrl + `/issues?per_page=100&since=${date.toISOString()}&sort=updated-asc` : null;
+        // now hitting the api for list of issues.
+        const observable: any = this.service.hitApiLoadIssues(baseUrl, null);
+        observable.toPromise()
+            .then((data) => {
+
+                const listOfIssues = JSON.parse(data['_body']);
+                const issueWithinDayContainingArray: any = [];
+
+                _.each(listOfIssues, function (issue) {
+                    let obj = {};
+                    // creating an object to be pushed in arrays.
+                    obj = {
+                        url: issue.url,
+                        htmlUrl: issue.html_url,
+                        updateDate: new Date(issue.updated_at)
+                    };
+                    // condition if last update was within 24 hours from now.
+                    issueWithinDayContainingArray.push(obj);
+                });
+                this.dayCount = issueWithinDayContainingArray.length;
+                this.issueWithinDayContainingArray = issueWithinDayContainingArray;
+                this.isDayLoading = false;
+
+                // Now since the logic is completed end the animation
+                // this.loadIssues();
+                return;
+            }, (error) => {
+                alert('invalid URL or the repo is private');
+                return reject();
+            });
+    }
+    // this function will fetch all the issues opened between last week and prev 24 hours
+    loadIssuesWithinLastWeek() {
+        // using Promises to handle repsonse of api call from service file.
+        // hitting api to check if user repo combination exists.
+        let baseUrl = this.baseUrl;
+
+        let date: any = new Date().getTime() - 604800000 + 19800000;
+        date = new Date(date);
+        baseUrl = baseUrl ? baseUrl + `/issues?per_page=100&since=${date.toISOString()}&sort=updated-asc` : null;
+
+
+        // now hitting the api for list of issues.
+        const observable: any = this.service.hitApiLoadIssues(baseUrl, null);
+        observable.toPromise()
+            .then((data) => {
+
+                const listOfIssues = JSON.parse(data['_body']);
+                const issueWithinWeekContainingArray: any = [];
+                date = new Date().getTime();
+                _.each(listOfIssues, function (issue) {
+                    let obj = {};
+                    // creating an object to be pushed in arrays.
+                    obj = {
+                        url: issue.url,
+                        htmlUrl: issue.html_url,
+                        updateDate: new Date(issue.updated_at)
+                    };
+                    // condition if last update was within 24 hours from now.
+                    if (obj['updateDate'].getTime() < date - 86400000 && obj['updateDate'].getTime() >= date - 604800000) {
+                        // condition if last update was betweeen 24 hours and a week from now.
+                        issueWithinWeekContainingArray.push(obj);
+                    }
+
+                });
+                this.weekCount = issueWithinWeekContainingArray.length;
+                this.issueWithinWeekContainingArray = issueWithinWeekContainingArray;
+                this.moreCount = this.count - (this.dayCount + this.weekCount);
+                // Now since the logic is completed end the animation
+                this.isWeekLoading = false;
+                // this.loadIssues();
+                return;
+            }, (error) => {
+                alert('invalid URL or the repo is private');
+                return reject();
+            });
+    }
+    // this function will fetch the first 100 issues opened more than a week ago
+    loadIssuesMoreThanLastWeek() {
+        // using Promises to handle repsonse of api call from service file.
+        // hitting api to check if user repo combination exists.
+        let baseUrl = this.baseUrl;
+
+        const page = ((this.dayCount + this.weekCount) / 100) + 1;
+        baseUrl = baseUrl ? baseUrl + `/issues?page=${page}per_page=100&&sort=updated-asc` : null;
+
+        const observable: any = this.service.hitApiLoadIssues(baseUrl, null);
+        observable.toPromise()
+            .then((data) => {
+                const listOfIssues = JSON.parse(data['_body']);
+                const issueMoreThanWeekContainingArray: any = [];
+                // date = new Date().getTime();
+                _.each(listOfIssues, function (issue) {
+                    let obj = {};
+                    // creating an object to be pushed in arrays.
+                    obj = {
+                        url: issue.url,
+                        htmlUrl: issue.html_url,
+                        updateDate: new Date(issue.updated_at)
+                    };
+                    issueMoreThanWeekContainingArray.push(obj);
+                });
+                this.issueMoreThanWeekContainingArray = issueMoreThanWeekContainingArray;
+                this.isMoreThanWeekLoading = false;
+                return;
+            }, (error) => {
+                alert('invalid URL or the repo is private');
+                return reject();
+            });
+    }
+
+    // this function fetches all the issues opened
+    loadAllIssues() {
+        // using Promises to handle repsonse of api call from service file.
+        // hitting api to check if user repo combination exists.
+        let baseUrl = this.baseUrl;
+        this.tempBaseUrl = baseUrl ? baseUrl + '/issues' : null;
+        baseUrl = baseUrl ? baseUrl + '/issues?page=1&per_page=100' : null;
+        // now hitting the api for list of issues.
+        const observable: any = this.service.hitApiLoadIssues(baseUrl, null);
+        observable.toPromise()
+            .then((data) => {
                 // retrieving the link parameter from response headers.
                 // Below logic is written to extract the no. of pages required at 100 issues per page.
                 let link = data.headers['_headers'].get('link')[0];
@@ -91,6 +233,9 @@ export class ListOfIssuesComponent implements OnInit {
                     // the function from service file returns an array of promises.
                     return Promise.all(observable3);
                 }
+            }, (error) => {
+                alert('invalid URL or the repo is private');
+                return reject();
             })
             .then((data_from_promise: any) => {
                 const data1: any[] = [];
@@ -106,10 +251,10 @@ export class ListOfIssuesComponent implements OnInit {
                 const issueWithinWeekContainingArray = [];
                 const issueMoreThanWeekContainingArray = [];
                 // looping through all the issues to filter them according to the last updated time.
+                const date = new Date().getTime();
                 _.each(listOfIssues, function (issue) {
                     let obj = {};
                     // getting current/now's date and assigning its value in milliseconds to a variable for comparision.
-                    const date = new Date().getTime();
                     // creating an object to be pushed in arrays.
                     obj = {
                         url: issue.url,
@@ -131,7 +276,6 @@ export class ListOfIssuesComponent implements OnInit {
                 // if count of issues was more than 0, give value of local variables to global ones to be accessed by html
                 if (count > 0) {
                     tempObj = {
-                        count: count,
                         issueWithinDayContainingArray: issueWithinDayContainingArray,
                         dayCount: issueWithinDayContainingArray.length,
                         issueWithinWeekContainingArray: issueWithinWeekContainingArray,
@@ -146,10 +290,11 @@ export class ListOfIssuesComponent implements OnInit {
                 }
                 // returning the above created temporary object.
                 return tempObj;
+            }, (error) => {
+                alert('error occured');
             })
             .then((obj) => {
                 if (!obj.error) {
-                    this.count = obj.count;
                     this.issueWithinDayContainingArray = obj.issueWithinDayContainingArray;
                     this.dayCount = obj.dayCount;
                     this.issueWithinWeekContainingArray = obj.issueWithinWeekContainingArray;
@@ -160,7 +305,6 @@ export class ListOfIssuesComponent implements OnInit {
                     alert('error occured');
                 }
                 // Now since the logic is completed end the animation
-                this.isLoading = false;
                 return;
             });
     }

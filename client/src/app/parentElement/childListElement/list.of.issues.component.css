@@ -1,6 +1,7 @@
 /* This css file contains classes for animation and some positioning */
 .sk-circle {
-  margin: 100px auto;
+  margin: 50% auto;
+  left: 50%;
   width: 40px;
   height: 40px;
   position: relative;

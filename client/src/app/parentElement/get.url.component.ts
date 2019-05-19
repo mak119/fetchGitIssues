@@ -14,7 +14,7 @@ export class GetUrlComponent {
     // initializing variable that controls if parent component is visible or child.
     // isSaveClicked == false ? display parent component(url entering form) : display list of issues;
     isSaveClicked = false;
-    baseUrl: '';
+    baseUrl: any;
     errorMessage: any;
 
     // this function handles going back from list of issues to url entering form page.
@@ -28,6 +28,8 @@ export class GetUrlComponent {
         }
     }
     onSave() {
+        // removing the white spaces from end
+        this.baseUrl = this.baseUrl.indexOf(' ') > 0 ? this.baseUrl.substr(0, this.baseUrl.indexOf(' ')) : this.baseUrl;
         // condition to check if entered url is valid or not.
         // length > 22 as minimum url can be : https://github.com/x/x which is of length 21
         if (this.baseUrl.substr(0, 18) === 'https://github.com' && this.baseUrl.length > 21) {

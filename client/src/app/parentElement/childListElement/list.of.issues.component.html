@@ -7,7 +7,7 @@
     <span class="margin-left-10-px margin-top-6-px">
         <!-- The main animation that goes in front of No. of issues, it's visibility is controlled by the variable isLoading -->
         <!-- If isLoading is true only then display this animation-->
-        <div class="spinner" *ngIf="isLoading">
+        <div class="spinner" *ngIf="isLoadingHeader">
             <div class="rect1"></div>
             <div class="rect2"></div>
             <div class="rect3"></div>
@@ -23,28 +23,13 @@
 </div>
 <br>
 <hr>
-<!-- The main animation that goes in circle, it's visibility is controlled by the variable isLoading -->
-<!-- If isLoading is true only then display this animation-->
-<div class="sk-circle" *ngIf="isLoading">
-    <div class="sk-circle1 sk-child"></div>
-    <div class="sk-circle2 sk-child"></div>
-    <div class="sk-circle3 sk-child"></div>
-    <div class="sk-circle4 sk-child"></div>
-    <div class="sk-circle5 sk-child"></div>
-    <div class="sk-circle6 sk-child"></div>
-    <div class="sk-circle7 sk-child"></div>
-    <div class="sk-circle8 sk-child"></div>
-    <div class="sk-circle9 sk-child"></div>
-    <div class="sk-circle10 sk-child"></div>
-    <div class="sk-circle11 sk-child"></div>
-    <div class="sk-circle12 sk-child"></div>
-</div>
+
 <!-- using ngb-tabset i.e. Angular and bootstrap for the UI -->
-<ngb-tabset *ngIf="!isLoading">
+<ngb-tabset>
     <ngb-tab>
         <ng-template ngbTabTitle>Within 24 Hrs ({{dayCount}})</ng-template>
         <!-- Block for issues opened within 24hrs from now -->
-        <ng-template ngbTabContent>
+        <ng-template ngbTabContent *ngIf="!isDayLoading">
             <table class="table table-hover col-lg-10">
                 <thead>
                     <th>Id</th>
@@ -59,11 +44,36 @@
                 </tr>
             </table>
         </ng-template>
+        <ng-template ngbTabContent *ngIf="isDayLoading">
+            <table class="table table-hover col-lg-10">
+                <thead>
+                    <th>Id</th>
+                    <th>URL</th>
+                    <th>Last Opening Date</th>
+                </thead>
+                <tr>
+                    <div class="sk-circle">
+                        <div class="sk-circle1 sk-child"></div>
+                        <div class="sk-circle2 sk-child"></div>
+                        <div class="sk-circle3 sk-child"></div>
+                        <div class="sk-circle4 sk-child"></div>
+                        <div class="sk-circle5 sk-child"></div>
+                        <div class="sk-circle6 sk-child"></div>
+                        <div class="sk-circle7 sk-child"></div>
+                        <div class="sk-circle8 sk-child"></div>
+                        <div class="sk-circle9 sk-child"></div>
+                        <div class="sk-circle10 sk-child"></div>
+                        <div class="sk-circle11 sk-child"></div>
+                        <div class="sk-circle12 sk-child"></div>
+                    </div>
+                </tr>
+            </table>
+        </ng-template>
     </ngb-tab>
     <ngb-tab>
         <ng-template ngbTabTitle>24 Hrs to Week ({{weekCount}})</ng-template>
         <!-- Block for issues opened between 24hrs and 7 days from now -->
-        <ng-template ngbTabContent>
+        <ng-template ngbTabContent *ngIf="!isWeekLoading">
             <table class="table table-hover col-lg-10">
                 <thead>
                     <th>Id</th>
@@ -78,11 +88,36 @@
                 </tr>
             </table>
         </ng-template>
+        <ng-template ngbTabContent *ngIf="isWeekLoading">
+            <table class="table table-hover col-lg-10">
+                <thead>
+                    <th>Id</th>
+                    <th>URL</th>
+                    <th>Last Opening Date</th>
+                </thead>
+                <tr>
+                    <div class="sk-circle">
+                        <div class="sk-circle1 sk-child"></div>
+                        <div class="sk-circle2 sk-child"></div>
+                        <div class="sk-circle3 sk-child"></div>
+                        <div class="sk-circle4 sk-child"></div>
+                        <div class="sk-circle5 sk-child"></div>
+                        <div class="sk-circle6 sk-child"></div>
+                        <div class="sk-circle7 sk-child"></div>
+                        <div class="sk-circle8 sk-child"></div>
+                        <div class="sk-circle9 sk-child"></div>
+                        <div class="sk-circle10 sk-child"></div>
+                        <div class="sk-circle11 sk-child"></div>
+                        <div class="sk-circle12 sk-child"></div>
+                    </div>
+                </tr>
+            </table>
+        </ng-template>
     </ngb-tab>
     <ngb-tab>
         <ng-template ngbTabTitle>More than a week ({{moreCount}})</ng-template>
         <!-- Block for issues opened more than a week ago -->
-        <ng-template ngbTabContent>
+        <ng-template ngbTabContent *ngIf="!isMoreThanWeekLoading">
             <table class="table table-hover col-lg-10">
                 <thead>
                     <th>Id</th>
@@ -94,6 +129,31 @@
                     <td>{{i + 1}}</td> <!-- i is initialized from 0 so adding 1 -->
                     <td>{{x.htmlUrl}}</td> <!-- getting value in object x with key htmlUrl -->
                     <td>{{x.updateDate}}</td> <!-- getting value in object x with key updateDate -->
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template ngbTabContent *ngIf="isMoreThanWeekLoading">
+            <table class="table table-hover col-lg-10">
+                <thead>
+                    <th>Id</th>
+                    <th>URL</th>
+                    <th>Last Opening Date</th>
+                </thead>
+                <tr>
+                    <div class="sk-circle">
+                        <div class="sk-circle1 sk-child"></div>
+                        <div class="sk-circle2 sk-child"></div>
+                        <div class="sk-circle3 sk-child"></div>
+                        <div class="sk-circle4 sk-child"></div>
+                        <div class="sk-circle5 sk-child"></div>
+                        <div class="sk-circle6 sk-child"></div>
+                        <div class="sk-circle7 sk-child"></div>
+                        <div class="sk-circle8 sk-child"></div>
+                        <div class="sk-circle9 sk-child"></div>
+                        <div class="sk-circle10 sk-child"></div>
+                        <div class="sk-circle11 sk-child"></div>
+                        <div class="sk-circle12 sk-child"></div>
+                    </div>
                 </tr>
             </table>
         </ng-template>

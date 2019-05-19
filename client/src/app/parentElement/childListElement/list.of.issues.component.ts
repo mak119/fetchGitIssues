@@ -33,6 +33,8 @@ export class ListOfIssuesComponent implements OnInit {
     weekCountTotal: any;
     moreCount: any;
     moreCountTotal: any;
+    pullRequestCount: any;
+    countExcludingPullRequest: any;
     isDayLoading = false;
     isWeekLoading = false;
     isMoreThanWeekLoading = false;
@@ -111,7 +113,7 @@ export class ListOfIssuesComponent implements OnInit {
                     // condition if last update was within 24 hours from now.
                     issueWithinDayContainingArray.push(obj);
                 });
-                this.dayCount = issueWithinDayContainingArray.length;
+                this.dayCountTotal = issueWithinDayContainingArray.length;
                 this.issueWithinDayContainingArray = issueWithinDayContainingArray;
                 this.isDayLoading = false;
 
@@ -157,9 +159,9 @@ export class ListOfIssuesComponent implements OnInit {
                     }
 
                 });
-                this.weekCount = issueWithinWeekContainingArray.length;
+                this.weekCountTotal = issueWithinWeekContainingArray.length;
                 this.issueWithinWeekContainingArray = issueWithinWeekContainingArray;
-                this.moreCount = this.count - (this.dayCount + this.weekCount);
+                this.moreCountTotal = this.count - (this.dayCountTotal + this.weekCountTotal);
                 // Now since the logic is completed end the animation
                 this.isWeekLoading = false;
                 // this.loadIssuesMoreThanLastWeek();
@@ -196,11 +198,13 @@ export class ListOfIssuesComponent implements OnInit {
                 });
                 this.issueMoreThanWeekContainingArray = issueMoreThanWeekContainingArray;
                 this.isMoreThanWeekLoading = false;
-                this.loadAllIssues();
                 return;
             }, (error) => {
                 alert('invalid URL or the repo is private');
                 return;
+            })
+            .then(() => {
+                return this.loadAllIssues();
             });
     }
 
@@ -251,6 +255,7 @@ export class ListOfIssuesComponent implements OnInit {
                 const listOfIssues = _.flatten(data1);
                 // initializing some local scope variables.
                 const count = listOfIssues.length;
+                let pullRequestCount = 0;
                 const issueWithinDayContainingArray = [];
                 const issueWithinWeekContainingArray = [];
                 const issueMoreThanWeekContainingArray = [];
@@ -265,15 +270,20 @@ export class ListOfIssuesComponent implements OnInit {
                         htmlUrl: issue.html_url,
                         updateDate: new Date(issue.updated_at)
                     };
-                    if (obj['updateDate'].getTime() >= date - 86400000) {
-                        // condition if last update was within 24 hours from now.
-                        issueWithinDayContainingArray.push(obj);
-                    } else if (obj['updateDate'].getTime() < date - 86400000 && obj['updateDate'].getTime() >= date - 604800000) {
-                        // condition if last update was betweeen 24 hours and a week from now.
-                        issueWithinWeekContainingArray.push(obj);
+
+                    if (issue['pull_request']) {
+                        pullRequestCount = pullRequestCount + 1;
                     } else {
-                        // condition if last update was more than a week from now.
-                        issueMoreThanWeekContainingArray.push(obj);
+                        if (obj['updateDate'].getTime() >= date - 86400000) {
+                            // condition if last update was within 24 hours from now.
+                            issueWithinDayContainingArray.push(obj);
+                        } else if (obj['updateDate'].getTime() < date - 86400000 && obj['updateDate'].getTime() >= date - 604800000) {
+                            // condition if last update was betweeen 24 hours and a week from now.
+                            issueWithinWeekContainingArray.push(obj);
+                        } else {
+                            // condition if last update was more than a week from now.
+                            issueMoreThanWeekContainingArray.push(obj);
+                        }
                     }
                 });
                 let tempObj = {};
@@ -285,7 +295,8 @@ export class ListOfIssuesComponent implements OnInit {
                         issueWithinWeekContainingArray: issueWithinWeekContainingArray,
                         weekCount: issueWithinWeekContainingArray.length,
                         issueMoreThanWeekContainingArray: issueMoreThanWeekContainingArray,
-                        moreCount: issueMoreThanWeekContainingArray.length
+                        moreCount: issueMoreThanWeekContainingArray.length,
+                        pullRequestCount: pullRequestCount - 1
                     };
                 } else {
                     tempObj = {
@@ -300,13 +311,15 @@ export class ListOfIssuesComponent implements OnInit {
             .then((obj) => {
                 if (!obj.error) {
                     this.issueWithinDayContainingArray = obj.issueWithinDayContainingArray;
-                    this.dayCountTotal = obj.dayCount;
+                    this.dayCount = obj.dayCount;
                     this.issueWithinWeekContainingArray = obj.issueWithinWeekContainingArray;
-                    this.weekCountTotal = obj.weekCount;
+                    this.weekCount = obj.weekCount;
                     this.issueMoreThanWeekContainingArray = obj.issueMoreThanWeekContainingArray;
-                    this.moreCountTotal = obj.moreCount;
-                    this.totalCount = `   (Total Count: ${this.dayCountTotal + this.weekCountTotal + this.moreCountTotal})`;
-
+                    this.moreCount = obj.moreCount;
+                    this.totalCount = `   (Total Issues Count: ${this.dayCount + this.weekCount + this.moreCount})`;
+                    this.pullRequestCount = `(Total P.R. Count: ${obj.pullRequestCount})`;
+                    const count = this.count - obj.pullRequestCount;
+                    this.countExcludingPullRequest = `(Open Issues(excluding PR) count: ${count})`;
                 } else {
                     alert('error occured');
                 }

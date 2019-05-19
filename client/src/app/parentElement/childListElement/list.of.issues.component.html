@@ -2,7 +2,7 @@
 <hr>
 <div class="display-inline-flex">
     <span>
-        <h4 style="display: inline-block">No. of Open Issues: </h4>
+        <h4 style="display: inline-block">Total No. of Open Issues: </h4>
     </span>
     <span class="margin-left-10-px margin-top-6-px">
         <!-- The main animation that goes in front of No. of issues, it's visibility is controlled by the variable isLoading -->
@@ -21,7 +21,7 @@
         <h4 class="color-red margin-left-10-px">{{count}} / </h4>
     </span>
     <span *ngIf="totalCount">
-        / {{totalCount}}
+        / {{countExcludingPullRequest}} / {{totalCount}} / {{pullRequestCount}}
     </span>
 </div>
 <br>

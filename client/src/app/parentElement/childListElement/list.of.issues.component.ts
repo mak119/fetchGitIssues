@@ -2,7 +2,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FetchGitApiService } from '../../fetch.git.api.service';
 import * as _ from 'underscore';
-import { reject } from 'q';
 
 // Component decorator
 @Component({
@@ -67,7 +66,7 @@ export class ListOfIssuesComponent implements OnInit {
                 this.count = this.issuesUrl ? result_returned['open_issues_count'] : null;
                 if (!this.count) {
                     alert(' No open issues for this repo');
-                    return reject();
+                    return;
                 } else {
                     this.loadIssuesWithin24Hours();
                     this.loadIssuesWithinLastWeek();
@@ -76,7 +75,7 @@ export class ListOfIssuesComponent implements OnInit {
                 }
             }, (error) => {
                 alert('invalid URL or the repo is private');
-                return reject();
+                return;
             });
     }
     // this function will fetch all the issues opened in last 24 hours
@@ -116,7 +115,7 @@ export class ListOfIssuesComponent implements OnInit {
                 return;
             }, (error) => {
                 alert('invalid URL or the repo is private');
-                return reject();
+                return;
             });
     }
     // this function will fetch all the issues opened between last week and prev 24 hours
@@ -162,7 +161,7 @@ export class ListOfIssuesComponent implements OnInit {
                 return;
             }, (error) => {
                 alert('invalid URL or the repo is private');
-                return reject();
+                return;
             });
     }
     // this function will fetch the first 100 issues opened more than a week ago
@@ -196,7 +195,7 @@ export class ListOfIssuesComponent implements OnInit {
                 return;
             }, (error) => {
                 alert('invalid URL or the repo is private');
-                return reject();
+                return;
             });
     }
 
@@ -235,7 +234,7 @@ export class ListOfIssuesComponent implements OnInit {
                 }
             }, (error) => {
                 alert('invalid URL or the repo is private');
-                return reject();
+                return;
             })
             .then((data_from_promise: any) => {
                 const data1: any[] = [];

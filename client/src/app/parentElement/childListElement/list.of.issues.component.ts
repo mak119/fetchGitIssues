@@ -87,7 +87,7 @@ export class ListOfIssuesComponent implements OnInit {
 
         let date: any = new Date().getTime() - 86400000 + 19800000;
         date = new Date(date);
-        baseUrl = baseUrl ? baseUrl + `/issues?per_page=100&since=${date.toISOString()}&sort=updated-asc` : null;
+        baseUrl = baseUrl ? baseUrl + `/issues?state=open&per_page=100&since=${date.toISOString()}&sort=updated-asc` : null;
         // now hitting the api for list of issues.
         const observable: any = this.service.hitApiLoadIssues(baseUrl, null);
         observable.toPromise()
@@ -127,7 +127,7 @@ export class ListOfIssuesComponent implements OnInit {
 
         let date: any = new Date().getTime() - 604800000 + 19800000;
         date = new Date(date);
-        baseUrl = baseUrl ? baseUrl + `/issues?per_page=100&since=${date.toISOString()}&sort=updated-asc` : null;
+        baseUrl = baseUrl ? baseUrl + `/issues?state=open&per_page=100&since=${date.toISOString()}&sort=updated-asc` : null;
 
 
         // now hitting the api for list of issues.
@@ -172,7 +172,7 @@ export class ListOfIssuesComponent implements OnInit {
         let baseUrl = this.baseUrl;
 
         const page = ((this.dayCount + this.weekCount) / 100) + 1;
-        baseUrl = baseUrl ? baseUrl + `/issues?page=${page}per_page=100&&sort=updated-asc` : null;
+        baseUrl = baseUrl ? baseUrl + `/issues?state=open&page=${page}per_page=100&&sort=updated-asc` : null;
 
         const observable: any = this.service.hitApiLoadIssues(baseUrl, null);
         observable.toPromise()

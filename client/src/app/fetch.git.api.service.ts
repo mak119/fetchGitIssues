@@ -23,9 +23,9 @@ export class FetchGitApiService {
                 tempBaseUrl = baseUrl;
                 // create a URL with query "?page=<number>&per_page=100"
                 if (i !== iterations) {
-                    tempBaseUrl = `${tempBaseUrl}?page=${i}&per_page=100`;
+                    tempBaseUrl = `${tempBaseUrl}?page=${i}&per_page=100&state=open`;
                 } else { // for the last page, create a URL with query "?page=<number>"
-                    tempBaseUrl = `${tempBaseUrl}?page=${i}`;
+                    tempBaseUrl = `${tempBaseUrl}?page=${i}&state=open`;
                 }
                 // pushing the promises into an array
                 promises.push(this.http.get(tempBaseUrl).toPromise());

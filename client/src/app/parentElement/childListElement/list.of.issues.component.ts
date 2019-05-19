@@ -176,9 +176,7 @@ export class ListOfIssuesComponent implements OnInit {
         // hitting api to check if user repo combination exists.
         let baseUrl = this.baseUrl;
 
-        let page = ((this.dayCount + this.weekCount) / 100);
-        page = Number(page.toFixed());
-        baseUrl = baseUrl ? baseUrl + `/issues?state=open&page=${page}per_page=100&&sort=updated-asc` : null;
+        baseUrl = baseUrl ? baseUrl + `/issues?state=open&per_page=100&&sort=updated-desc` : null;
 
         const observable: any = this.service.hitApiLoadIssues(baseUrl, null);
         observable.toPromise()

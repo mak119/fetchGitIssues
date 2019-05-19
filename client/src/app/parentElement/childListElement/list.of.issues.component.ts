@@ -72,7 +72,6 @@ export class ListOfIssuesComponent implements OnInit {
                     this.loadIssuesWithin24Hours();
                     this.loadIssuesWithinLastWeek();
                     this.loadIssuesMoreThanLastWeek();
-                    this.loadAllIssues();
                     return;
                 }
             }, (error) => {
@@ -193,6 +192,7 @@ export class ListOfIssuesComponent implements OnInit {
                 });
                 this.issueMoreThanWeekContainingArray = issueMoreThanWeekContainingArray;
                 this.isMoreThanWeekLoading = false;
+                this.loadAllIssues();
                 return;
             }, (error) => {
                 alert('invalid URL or the repo is private');
